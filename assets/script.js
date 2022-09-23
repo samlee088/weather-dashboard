@@ -201,6 +201,7 @@ fetch(weatherURL)
                 $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
                 $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
                 j=0;
+                break;
                
             }
             
@@ -208,7 +209,7 @@ fetch(weatherURL)
                 console.log("No");
                 console.log(moment().add(j,'days').startOf('day'));
                 console.log(data.list[j].dt_txt);
-              
+              break;
             }
 
 
