@@ -18,23 +18,29 @@
 <h1 class ="searchText"> Search for a City:</h1>
 
 
+<form id="citySearch" class = "card-body">
+<label class="form-label" for="city"> City</label>>
+<input name="city" id="cityId" type="text" autofocus="true" class="form-input">
+<button type="submit" class="btn">Search City</button>
+</form>
+
+
+
 
 <div class = "card text-center" style = "width:40rem;">
     <div class="card-header">
         QuickList
     </div>
-    <div class="row">
-        <div id="cityButton" class="text-center" style = "width:80%;" >
-            <button data-language="Seattle" class = "btn btn-primary m-2 btn-lg btn-block text-center">Seattle</button> </li>
+    
+        <div id="cityButton" class="card-body text-center" style = "width:80%;" >
+            <button data-language="Seattle" class = "btn btn-primary m-2 btn-lg btn-block text-center">Seattle</button> 
             <button data-language="Sacramento" class = "btn btn-primary m-2 btn-lg btn-block"> Sacramento</button> 
-            <button data-language="New York" class = "btn btn-primary m-2 btn-lg btn-block">New York</button> 
+            <button  data-language="New York" class = "btn btn-primary m-2 btn-lg btn-block">New York</button> 
             <button data-language="Dallas" class = "btn btn-primary m-2 btn-lg btn-block">Dallas</button> 
-            <!-- <button data-language="Maui" class = "btn btn-primary m-2 btn-lg btn-block">Maui</button>  -->
-        </div>
-    </div>
-
-
    
+        </div>
+    
+
 
 
 
@@ -43,10 +49,87 @@
 
 </div>
 
+<h1 id="currentDate"></h1>
 <h1> City Name : </h1>
 <h1 id="cityName"></h1>
+<h2> Temperature</h2>
+<h2 id="currentTemperature"></h2>
+<h2 id="currentWind"> </h2>
+<h2 id="currentHumidity"></h2>
+
+<h1>day 1</h1>
 
 
+<div class="container">
+    <div class ="row">
+        <div class = col-lg-5>
+            <div class = card>
+                <div class = card-block>
+                    <p id="1date"></p>
+                    <p id="1icon"></p>
+                    <p id="1temp"></p>
+                    <p id="1wind"></p>
+                    <p id="1humidity"></p>
+                </div>
+            </div>
+        </div>
+        <div class = col-lg-5>
+            <div class = card>
+                <div class = card-block>
+                    <p id="2date"></p>
+                    <p id="2icon"></p>
+                    <p id="2temp"></p>
+                    <p id="2wind"></p>
+                    <p id="2humidity"></p>
+                </div>
+            </div>
+        </div>
+        <div class = col-lg-5>
+            <div class = card>
+                <div class = card-block>
+                    <p id="3date"></p>
+                    <p id="3icon"></p>
+                    <p id="3temp"></p>
+                    <p id="3wind"></p>
+                    <p id="3humidity"></p>
+                </div>
+            </div>
+        </div>
+        <div class = col-lg-5>
+            <div class = card>
+                <div class = card-block>
+                    <p id="4date"></p>
+                    <p id="4icon"></p>
+                    <p id="4temp"></p>
+                    <p id="4wind"></p>
+                    <p id="4humidity"></p>
+                </div>
+            </div>
+        </div>
+        <div class = col-lg-5>
+            <div class = card>
+                <div class = card-block>
+                    <p id="5date"></p>
+                    <p id="5icon"></p>
+                    <p id="5temp"></p>
+                    <p id="5wind"></p>
+                    <p id="5humidity"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script 
+type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js">
+</script>
 <script type="text/Javascript" src = "assets/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
