@@ -1,21 +1,6 @@
-/* questions section
-way to expand the array to know what the avaialble variables are? */
-
-
-
-
-
 // API key 17491cca6b7cf053d78af447ad4c8844
 
 var APIKey = "17491cca6b7cf053d78af447ad4c8844";
-
-// later make a variable that will store the city name depending on the user's input, including {city, state, country}
-
-// this was a test curl to use in gitbash
-// curl https://api.openweathermap.org/data/2.5/weather?q=seattle&appid=17491cca6b7cf053d78af447ad4c8844
-
-
-
 
 
 // var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
@@ -33,13 +18,17 @@ var  windSpeed;
 var   uvIndex;
 var cityTypeSearch = document.querySelector('#cityId');
 var cityTypeSearchButton = document.querySelector('#citySearch');
+var clearSearch = document.querySelector('#clearButton');
+
+
+
 
 var cityInput = function (event) {
     event.preventDefault();
 
     city = cityTypeSearch.value.trim();
     console.log(city);
-
+    addSearch(city);
     weatherAPI(event);
 }
 
@@ -52,8 +41,63 @@ var buttonClick = function(event) {
     city = event.target.getAttribute
     ('data-language');
     console.log(city);
-
     weatherAPI(event);
+}
+
+
+
+// Storage for searched cities in local storage
+
+var searchList = [];
+
+// cityButtonSearch add in another eventlistener to add in to array
+
+function addSearch(event) {
+searchList.push(event);
+   
+localStorage.setItem("cities",JSON.stringify(searchList))
+loadSearch();
+}
+
+// function storeSearch () {
+// localStorage.setItem("cities",JSON.stringify(searchList))
+// }
+
+
+// grab stored data and reload it, need to have this happen on the start of the page, and also when an additional search is added
+
+function loadSearch(event) {
+    var searchArray = JSON.parse(localStorage.getItem("cities"));
+
+    $('#cityButton').empty();
+   
+
+
+for (i=0; i<searchArray.length; i++) {
+
+// grab an item from the array
+// then take this item value, create a button with the class id, and then append this button to the list
+
+var cityName = searchArray[i];
+
+
+
+$('#cityButton').append(
+        $(document.createElement('button')).prop({
+            type: 'button',
+            innerHTML: cityName,
+            'data-language':cityName,
+            class: 'btn btn-primary m-2 btn-lg btn-block text-center'
+        })
+)
+}
+}
+
+
+function clearCities(event) {
+    searchList = [];
+    localStorage.setItem("cities",JSON.stringify(searchList));
+    
 }
 
 
@@ -243,7 +287,8 @@ fetch(weatherURL)
 
 cityButtons.addEventListener('click', buttonClick);
 cityTypeSearchButton.addEventListener('submit', cityInput);
-
+cityTypeSearchButton.addEventListener('submit,', addSearch);
+clearSearch.addEventListener('click', clearCities);
 
 
 
