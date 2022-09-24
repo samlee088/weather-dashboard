@@ -66,7 +66,7 @@ loadSearch();
 
 // grab stored data and reload it, need to have this happen on the start of the page, and also when an additional search is added
 
-function loadSearch(event) {
+function loadSearch() {
     var searchArray = JSON.parse(localStorage.getItem("cities"));
 
     $('#cityButton').empty();
@@ -224,40 +224,77 @@ fetch(weatherURL)
       
 
 
-            for (j=0;j<40;j++)   {
-            var unixTimeStamp = data.list[j].dt;
-            var unixTime = function toDate(unixtimeStamp) {
-                return new Date (
-                    unixTimeStamp * 1000
-                )
-            }
-            console.log(unixTime);
-// if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
+//             for (j=0;j<40;j++)   {
+//             var unixTimeStamp = data.list[j].dt;
+//             var unixTime = function toDate(unixtimeStamp) {
+//                 return new Date (
+//                     unixTimeStamp * 1000
+//                 )
+//             }
+//             console.log(unixTime);
+// // if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
 
-            if ((moment().add(i,'days').startOf('day')).isAfter(unixTime)) {
-                console.log("Yes");
-                console.log(moment().add(j,'days').startOf('day'));
-                console.log(data.list[j].dt_txt);
+//             if ((moment().add(i,'days').startOf('day')).isAfter(unixTime)) {
+//                 console.log("Yes");
+//                 console.log(moment().add(j,'days').startOf('day'));
+//                 console.log(data.list[j].dt_txt);
 
-                var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
+//                 var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
 
-                $('#' + i + "temp").text(tempConversion + "Temperature");
-                $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
-                $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
-                j=0;
-                break;
+//                 $('#' + i + "temp").text(tempConversion + "Temperature");
+//                 $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
+//                 $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
+//                 j=0;
+//                 break;
                
-            }
+//             }
             
-            else {
-                console.log("No");
-                console.log(moment().add(j,'days').startOf('day'));
-                console.log(data.list[j].dt_txt);
-              break;
-            }
+//             else {
+//                 console.log("No");
+//                 console.log(moment().add(j,'days').startOf('day'));
+//                 console.log(data.list[j].dt_txt);
+//               break;
+//             }
 
 
 
+
+            for (j=0;j<40;j++)   {
+                var unixTimeStamp = data.list[j].dt;
+                var unixTime = function toDate(unixtimeStamp) {
+                    return new Date (
+                        unixTimeStamp * 1000
+                    )
+                }
+                console.log(unixTime);
+                var date = new Date();
+                date.setDate(date.getDate() + i);
+                console.log(date);
+                var currentTime = Math.round((date).getTime()/1000);
+                console.log(currentTime);
+    // if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
+    
+                if ((currentTime)<(data.list[j].dt)) {
+                    console.log("Yes");
+                    console.log(moment().add(j,'days').startOf('day'));
+                    console.log(data.list[j].dt_txt);
+    
+                    var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
+    
+                    $('#' + i + "temp").text(tempConversion + "Temperature");
+                    $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
+                    $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
+                    j=0;
+                    break;
+                   
+                }
+                
+                else {
+                    console.log("No");
+                    console.log(moment().add(j,'days').startOf('day'));
+                    console.log(data.list[j].dt_txt);
+                 
+                }
 
 
  //display these, and then append again to create a row of boxes
