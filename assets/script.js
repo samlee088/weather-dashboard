@@ -71,7 +71,7 @@ function clearCities(event) {
 /* Function to test if submit eventhandler will successfuly run weather API, if so then add in city as a QuickList button option */
 function submissionCheck(event) {
     
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
 
     fetch(queryURL)
     .then(function(response){
@@ -84,7 +84,7 @@ function submissionCheck(event) {
   /* Initial City search from 1st API grabs current day data, and lat and lon. Lat and Lon then passed through 2nd API to get further forecast dadta */
 function weatherAPI(event) {
 
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
 
 fetch(queryURL)
     .then(function (response) {
@@ -92,7 +92,7 @@ fetch(queryURL)
             return response.json().then(function(data) {
             /* Weather data comes in as Kelvin, converstion to fahrenheit*/
                 var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32).toFixed(2);
-                var currentWeatherIcon = " http://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
+                var currentWeatherIcon = " https://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
                 $('#currentDateIcon').attr('src',currentWeatherIcon);
                 $('#cityName').text(data.name);
                 $('#currentTemperature').text("Temp: " + currentTemperature);
@@ -120,7 +120,7 @@ fetch(queryURL)
 
 function weatherData(la, lo)  {
 
-var weatherURL = "http://api.openweathermap.org/data/2.5/forecast?lat=" + la + "&lon=" + lo + "&appid=" + APIKey;
+var weatherURL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + la + "&lon=" + lo + "&appid=" + APIKey;
 
 
 fetch(weatherURL) 
@@ -148,7 +148,7 @@ fetch(weatherURL)
 
                     if ((currentTime)<=(data.list[j].dt)) {
                         var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32).toFixed(2);
-                        var weatherIcon = " http://openweathermap.org/img/wn/" + data.list[j].weather[0].icon + ".png";
+                        var weatherIcon = " https://openweathermap.org/img/wn/" + data.list[j].weather[0].icon + ".png";
                         $('#' + i + "icon").attr("src", weatherIcon);
                         $('#' + i + "temp").text("Temp: " + tempConversion);
                         $('#' + i + "wind").text("Wind Speed: " + data.list[j].wind.speed);
