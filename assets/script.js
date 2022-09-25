@@ -1,51 +1,42 @@
 /* Variables */
 
 var APIKey = "17491cca6b7cf053d78af447ad4c8844";
+var city;
+var searchList = [];
 var cityButtons = document.querySelector('#cityButton');
-
-
-var city ;
-var cityName = "";
-var currentDate;
-var  temperature;
-var  humidity;
-var  windSpeed;
-var   uvIndex;
 var cityTypeSearch = document.querySelector('#cityId');
 var cityTypeSearchButton = document.querySelector('#citySearch');
 var clearSearch = document.querySelector('#clearButton');
 
 
 
-
+/* Grabs the text input value, and starts 2 functions. Both check to see if they are valid inputs for the API, and then 1-appends city to QuickList 2-runs forecasted data grab
+ */
 var cityInput = function (event) {
     event.preventDefault();
     city = cityTypeSearch.value.trim();
     weatherAPI(event);
     submissionCheck(city);
-
 }
 
+/* This is function for eventHandler for clicks on the saves cities in the QuickList */
 var buttonClick = function(event) {
-
     city = event.target.getAttribute
     ('data-language');
-    console.log(city);
    if (city) {
     weatherAPI(event);
 }
 }
 
 
-var searchList = [];
-
+/* Functions that are about the localStorage. Adding in note that addSearch and loadSearch are seperated intentionally to have the ability create test to see if eventhandler through submit or click is triggered.*/
 function addSearch(event) {
-searchList.push(event);
-   
-localStorage.setItem("cities",JSON.stringify(searchList))
-loadSearch();
-}
+    searchList.push(event);
+    
+    localStorage.setItem("cities",JSON.stringify(searchList))
 
+    loadSearch();
+}
 
 
 function loadSearch() {
@@ -54,27 +45,21 @@ function loadSearch() {
 
     $('#cityButton').empty();
    
+    for (i=0; i<searchList.length; i++) {
 
+        var cityName = searchList[i];
 
-for (i=0; i<searchList.length; i++) {
-
-var cityName = searchList[i];
-
-
-
-$('#cityButton').append(
-        $(document.createElement('button')).prop({
-            type: 'button',
-            innerHTML: cityName,
-            'data-language':cityName,
-            class: 'btn btn-primary m-2 btn-lg btn-block text-center',
-          
-        }).attr('data-language',cityName)
-        
-)
+        $('#cityButton').append(
+                $(document.createElement('button')).prop({
+                    type: 'button',
+                    innerHTML: cityName,
+                    'data-language':cityName,
+                    class: 'btn btn-primary m-2 btn-lg btn-block text-center',
+                
+                }).attr('data-language',cityName) 
+        )
+    }
 }
-}
-
 
 function clearCities(event) {
     searchList = [];
@@ -82,9 +67,7 @@ function clearCities(event) {
     $('#cityButton').empty();
 }
 
-
-
-
+/* Function to test if submit eventhandler will successfuly run weather API, if so then add in city as a QuickList button option */
 function submissionCheck(event) {
     
     var queryURL = "http://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
@@ -97,49 +80,44 @@ function submissionCheck(event) {
 }
 
 
-
+  /* Initial City search from 1st API grabs current day data, and lat and lon. Lat and Lon then passed through 2nd API to get further forecast dadta */
 function weatherAPI(event) {
 
     var queryURL = "http://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
 
 fetch(queryURL)
-.then(function (response) {
-    if(response.ok) {
-    return response.json().then(function(data) {
+    .then(function (response) {
+        if(response.ok) {
+            return response.json().then(function(data) {
+            /* Weather data comes in as Kelvin, converstion to fahrenheit*/
+                var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32).toFixed(2);
+                var currentWeatherIcon = " http://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
+                $('#currentDateIcon').attr('src',currentWeatherIcon);
+                $('#cityName').text(data.name);
+                $('#currentTemperature').text("Temp: " + currentTemperature);
+                $('#currentWind').text("Wind Speed: " +data.wind.speed);
+                $('#currentHumidity').text("Humidity: " +data.main.humidity);
 
-        $('#data').text(data);
-        cityName = data.name
-        var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32).toFixed(2);
-        var currentWeatherIcon = " http://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
-        $('#currentDateIcon').attr('src',currentWeatherIcon);
-        $('#cityName').text(data.name);
-        $('#currentTemperature').text("Temp: " + currentTemperature);
-        $('#currentWind').text("Wind Speed: " +data.wind.speed);
-        $('#currentHumidity').text("Humidity: " +data.main.humidity);
-        var lat = data.coord.lat;
-        var lon = data.coord.lon;
-       
-        weatherData(lat,lon);
+                var lat = data.coord.lat;
+                var lon = data.coord.lon;
+            
+                weatherData(lat,lon);
 
+            })
+        }
+            else {
+                alert (response.statusText);
+                return;
+            }
     })
-
-}
-
-    else {
-        alert (response.statusText);
-        return;
-    }
-
-}
-)
     .catch(function(error) {
         alert('unable to connect to API');
     });
+    
 }
 
 
 function weatherData(la, lo)  {
-var  APIKey = "17491cca6b7cf053d78af447ad4c8844";
 
 var weatherURL = "http://api.openweathermap.org/data/2.5/forecast?lat=" + la + "&lon=" + lo + "&appid=" + APIKey;
 
@@ -151,87 +129,41 @@ fetch(weatherURL)
 
     .then(function(data) {
 
-        console.log(data);
 
-        $('#temperature').text(data.list[0].main.temp);
-
-        console.log(data.list[0].main.temp)
-
-
-    
-
+    /* the loops with i runs through each of the 5 boxes, each going through a j loop that searches through all 40 array values for a match based off of date. Data from API comes through as Unix time Stamp*/
         for (i=1;i<6;i++) {
     
-
-            var weatherIcon = " http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
-
-            var tempConversion = (((1.8)*((data.list[i].main.temp)-273.15))+32)
             var timeNow = moment();
-            $('#currentDate').text(moment().format('L'));
-            // $('#' + i + 'date').text(data.list[i].dt_txt);
-            $('#' + i + 'date').text((moment().add(i,'days').format('L')))
-            // $('#' + i + "icon").text(data.list[i].weather[0].icon);
-            // $('#' + i + "icon").innerHtml(weatherIcon);
-              $('#' + i + "icon").attr("src", weatherIcon);
-        //    $('#' + i + "icon").prop(weatherIcon);
-            // $('#' + i + "icon").attr(" http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png");
-            // $('#' + i + "temp").text(data.list[i].main.temp);
-            $('#' + i + "temp").text(tempConversion + "Temperature");
-            $('#' + i + "wind").text(data.list[i].wind.speed + " wind speed");
-            $('#' + i + "humidity").text(data.list[i].main.humidity + " humidity") ;
 
-       
+            $('#currentDate').text(moment().format('L'));
+            $('#' + i + 'date').text((moment().add(i,'days').format('L')))
+
             for (j=0;j<40;j++)   {
                 var unixTimeStamp = data.list[j].dt;
-                // var unixTime = function toDate(unixtimeStamp) {
-                //     return new Date (
-                //         unixTimeStamp * 1000
-                //     )
-                // }
-                // console.log(unixTime);
                 var date = new Date();
                 date.setDate(date.getDate() + (i-1));
-                console.log(date);
                 var currentTime = Math.round((date).getTime()/1000);
-                // console.log(currentTime);
-    // if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
-    var currentDate = new Date(unixTimeStamp*1000).toLocaleDateString()
+                var currentDate = new Date(unixTimeStamp*1000).toLocaleDateString();
 
-
-        console.log(currentTime,data.list[j].dt);
-
-                if ((currentTime)<=(data.list[j].dt)) {
-                    console.log(currentTime);
-                    console.log("Yes");
-                    console.log(moment().add(j,'days').startOf('day'));
-                    console.log(data.list[j].dt_txt);
-    
-                    var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32).toFixed(2);
-    
-                    $('#' + i + "temp").text("Temp: " + tempConversion);
-                    $('#' + i + "wind").text("Wind Speed: " + data.list[j].wind.speed);
-                    $('#' + i + "humidity").text("Humidity: " + data.list[j].main.humidity) ;
-                    j=0;
-                    break;
-                   
-                }
-                
-                else {
-                    console.log("No");
-                    console.log(moment().add(j,'days').startOf('day'));
-                    console.log(data.list[j].dt_txt);
-                 
-                }
-        }
-
-    } 
+                    if ((currentTime)<=(data.list[j].dt)) {
+                        var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32).toFixed(2);
+                        var weatherIcon = " http://openweathermap.org/img/wn/" + data.list[j].weather[0].icon + ".png";
+                        $('#' + i + "icon").attr("src", weatherIcon);
+                        $('#' + i + "temp").text("Temp: " + tempConversion);
+                        $('#' + i + "wind").text("Wind Speed: " + data.list[j].wind.speed);
+                        $('#' + i + "humidity").text("Humidity: " + data.list[j].main.humidity) ;
+                        j=0;
+                        break;
+                    }
+            }
+        } 
     })
 
 }
+
 loadSearch();
 cityButtons.addEventListener('click', buttonClick);
 cityTypeSearchButton.addEventListener('submit', cityInput);
-// cityTypeSearchButton.addEventListener('submit',submissionCheck());
 clearSearch.addEventListener('click', clearCities);
 
 
