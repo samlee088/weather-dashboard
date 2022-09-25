@@ -58,8 +58,7 @@ function loadSearch() {
                 
                 }).attr('data-language',cityName) 
         )
-    }
-}
+    }}
 
 function clearCities(event) {
     searchList = [];
