@@ -44,21 +44,23 @@ function loadSearch() {
     searchList = JSON.parse(localStorage.getItem("cities"));
 
     $('#cityButton').empty();
-   
-    for (i=0; i<searchList.length; i++) {
+   if(searchList.Length!==null) {
+        for (i=0; i<searchList.length; i++) {
 
-        var cityName = searchList[i];
+            var cityName = searchList[i];
 
-        $('#cityButton').append(
-                $(document.createElement('button')).prop({
-                    type: 'button',
-                    innerHTML: cityName,
-                    'data-language':cityName,
-                    class: 'btn btn-primary m-2 btn-lg btn-block text-center',
-                
-                }).attr('data-language',cityName) 
-        )
-    }}
+            $('#cityButton').append(
+                    $(document.createElement('button')).prop({
+                        type: 'button',
+                        innerHTML: cityName,
+                        'data-language':cityName,
+                        class: 'btn btn-primary m-2 btn-lg btn-block text-center',
+                    
+                    }).attr('data-language',cityName) 
+            )
+        }
+    }       
+}
 
 function clearCities(event) {
     searchList = [];
