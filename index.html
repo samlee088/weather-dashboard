@@ -6,113 +6,116 @@
         <title> Weather Dashboard</title>
         <link rel="stylesheet" href ="./assets/style.css" />
 
-
-
     </head>
 <body>
-
+<header>
 <h1 class = "intro"> Weather Dashboard </h1>
+</header>
+
+<section id="search">
+    <h1 class ="searchText"> Search for a City:</h1>
+
+
+        <form id="citySearch" class = "card-body">
+        <label class="form-label" for="city"> City</label>
+        <input name="city" id="cityId" type="text" autofocus="true" class="form-input">
+        <!-- <button type="submit" class="btn">Search City</button> -->
+        </form>
 
 
 
-<h1 class ="searchText"> Search for a City:</h1>
 
-
-<form id="citySearch" class = "card-body">
-<label class="form-label" for="city"> City</label>>
-<input name="city" id="cityId" type="text" autofocus="true" class="form-input">
-<button type="submit" class="btn">Search City</button>
-</form>
-
-
-
-
-<div class = "card text-center" style = "width:40rem;">
-    <div class="card-header">
-        QuickList
-    </div>
+        <div class = "card text-center" style = "width:100%;">
+            <div class="card-header">
+            QuickList
+         </div>
+        
+            <div id="cityButton" class="card-body text-center" style = "width:80%;" >
+                <!-- <button data-language="Seattle" class = "btn btn-primary m-2 btn-lg btn-block text-center">Seattle</button> 
+                <button data-language="Sacramento" class = "btn btn-primary m-2 btn-lg btn-block"> Sacramento</button> 
+                <button  data-language="New York" class = "btn btn-primary m-2 btn-lg btn-block">New York</button> 
+                <button data-language="Dallas" class = "btn btn-primary m-2 btn-lg btn-block">Dallas</button>  -->
     
-        <div id="cityButton" class="card-body text-center" style = "width:80%;" >
-            <button data-language="Seattle" class = "btn btn-primary m-2 btn-lg btn-block text-center">Seattle</button> 
-            <button data-language="Sacramento" class = "btn btn-primary m-2 btn-lg btn-block"> Sacramento</button> 
-            <button  data-language="New York" class = "btn btn-primary m-2 btn-lg btn-block">New York</button> 
-            <button data-language="Dallas" class = "btn btn-primary m-2 btn-lg btn-block">Dallas</button> 
+            </div>
+            <div id="clearButton">
+                <button id='clearButtonAction'> Clear</button>
+            </div>
+
+</section>
+
+
+
+
+
+<div class = "values">
+
+<div class="information">
+
+    <div class="card">
+           <div class="card-block">
+            <h1 id="cityName"></h1> 
+            <h1 id="currentDate"></h1>
+            <img id="currentDateIcon"><img>
+            <h2 id="currentTemperature"></h2>
+            <h2 id="currentWind"> </h2>
+            <h2 id="currentHumidity"></h2>
+        </div> 
+    </div>
    
-        </div>
-        <div id="clearButton">
-            <button id='clearButtonAction'> Clear</button>
-        </div>
 
-
-
-
-
-
-
-</div>
-
-<h1 id="currentDate"></h1>
-<h1> City Name : </h1>
-<h1 id="cityName"></h1>
-<h2> Temperature</h2>
-<h2 id="currentTemperature"></h2>
-<h2 id="currentWind"> </h2>
-<h2 id="currentHumidity"></h2>
-
-<h1>day 1</h1>
 
 
 <div class="container">
     <div class ="row">
-        <div class = col-lg-5>
+        <div class = col-lg-2>
             <div class = card>
                 <div class = card-block>
                     <p id="1date"></p>
-                    <p id="1icon"></p>
+                    <img id="1icon"></img>
                     <p id="1temp"></p>
                     <p id="1wind"></p>
                     <p id="1humidity"></p>
                 </div>
             </div>
         </div>
-        <div class = col-lg-5>
+        <div class = col-lg-2>
             <div class = card>
                 <div class = card-block>
                     <p id="2date"></p>
-                    <p id="2icon"></p>
+                    <img id="2icon"></img>
                     <p id="2temp"></p>
                     <p id="2wind"></p>
                     <p id="2humidity"></p>
                 </div>
             </div>
         </div>
-        <div class = col-lg-5>
+        <div class = col-lg-2>
             <div class = card>
                 <div class = card-block>
                     <p id="3date"></p>
-                    <p id="3icon"></p>
+                    <img id="3icon"></img>
                     <p id="3temp"></p>
                     <p id="3wind"></p>
                     <p id="3humidity"></p>
                 </div>
             </div>
         </div>
-        <div class = col-lg-5>
+        <div class = col-lg-2>
             <div class = card>
                 <div class = card-block>
                     <p id="4date"></p>
-                    <p id="4icon"></p>
+                    <img id="4icon"></img>
                     <p id="4temp"></p>
                     <p id="4wind"></p>
                     <p id="4humidity"></p>
                 </div>
             </div>
         </div>
-        <div class = col-lg-5>
+        <div class = col-lg-2>
             <div class = card>
                 <div class = card-block>
                     <p id="5date"></p>
-                    <p id="5icon"></p>
+                    <img id="5icon"></img>
                     <p id="5temp"></p>
                     <p id="5wind"></p>
                     <p id="5humidity"></p>
@@ -124,7 +127,9 @@
 
 
 
-<p id="data"></p>
+
+
+</div>
 
 
 
@@ -132,9 +137,9 @@
 <script 
 type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js">
 </script>
-<script type="text/Javascript" src = "assets/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script type="text/Javascript" src = "assets/script.js"></script>
 </body>
 </html>

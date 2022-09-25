@@ -28,7 +28,7 @@ var cityInput = function (event) {
 
     city = cityTypeSearch.value.trim();
     console.log(city);
-    addSearch(city);
+    // addSearch(city);
     weatherAPI(event);
 }
 
@@ -38,12 +38,17 @@ var cityInput = function (event) {
 
 var buttonClick = function(event) {
     // var city = event.target.getAttribute
+
+        
+
+
     city = event.target.getAttribute
     ('data-language');
     console.log(city);
+   if (city) {
     weatherAPI(event);
 }
-
+}
 
 
 // Storage for searched cities in local storage
@@ -66,19 +71,39 @@ loadSearch();
 
 // grab stored data and reload it, need to have this happen on the start of the page, and also when an additional search is added
 
+// function pageLoad() {
+//     searchList = JSON.parse(localStorage.getItem("cities"));
+  
+//     $('#cityButton').empty();
+
+//     $('#cityButton').append(
+//         $(document.createElement('button')).prop({
+//             type: 'button',
+//             innerHTML: cityName,
+//             'data-language':cityName,
+//             class: 'btn btn-primary m-2 btn-lg btn-block text-center',
+          
+//         }).attr('data-language',cityName)
+        
+// )
+// }
+
+
+
 function loadSearch() {
-    var searchArray = JSON.parse(localStorage.getItem("cities"));
+
+    searchList = JSON.parse(localStorage.getItem("cities"));
 
     $('#cityButton').empty();
    
 
 
-for (i=0; i<searchArray.length; i++) {
+for (i=0; i<searchList.length; i++) {
 
 // grab an item from the array
 // then take this item value, create a button with the class id, and then append this button to the list
 
-var cityName = searchArray[i];
+var cityName = searchList[i];
 
 
 
@@ -87,8 +112,10 @@ $('#cityButton').append(
             type: 'button',
             innerHTML: cityName,
             'data-language':cityName,
-            class: 'btn btn-primary m-2 btn-lg btn-block text-center'
-        })
+            class: 'btn btn-primary m-2 btn-lg btn-block text-center',
+          
+        }).attr('data-language',cityName)
+        
 )
 }
 }
@@ -97,7 +124,7 @@ $('#cityButton').append(
 function clearCities(event) {
     searchList = [];
     localStorage.setItem("cities",JSON.stringify(searchList));
-    
+    $('#cityButton').empty();
 }
 
 
@@ -105,38 +132,74 @@ function clearCities(event) {
 
 function weatherAPI(event) {
 
-    // var city = event.target.getAttribute('data-language');
-    // city = event.target.getAttribute('data-language');
-    // console.log(city);
     var queryURL = "http://api.openweathermap.org/data/2.5/weather?&q=" + city + "&cnt=6&appid=" + APIKey;
 
 fetch(queryURL)
 
 .then(function (response) {
-    return response.json();
-})
+    if(response.ok) {
+    return response.json().then(function(data) {
+        addSearch(city);
+        $('#data').text(data);
+        console.log(data);
+        cityName = data.name
+        var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32).toFixed(2);
+        var currentWeatherIcon = " http://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
 
-.then(function(data) {
-    $('#data').text(data);
-    console.log(data);
-    console.log(data.weather[0].description);
-    cityName = data.name
-    console.log(cityName);
+       
+        $('#currentDateIcon').attr('src',currentWeatherIcon);
+        $('#cityName').text(data.name);
+        $('#currentTemperature').text("Temp: " + currentTemperature);
+        $('#currentWind').text("Wind Speed: " +data.wind.speed);
+        $('#currentHumidity').text("Humidity: " +data.main.humidity);
+        console.log(currentDate);
+        var lat = data.coord.lat;
+        var lon = data.coord.lon;
+        console.log(lat);
+        console.log(lon);
+       
+        weatherData(lat,lon);
+    })
 
-    var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32)
 
-    $('#cityName').text(data.name);
-    $('#currentTemperature').text(currentTemperature);
-    $('#currentWind').text(data.wind.speed + " wind speed");
-    $('#currentHumidity').text(data.main.humidity + " humidity");
-    console.log(currentDate);
-    var lat = data.coord.lat;
-    var lon = data.coord.lon;
-    console.log(lat);
-    console.log(lon);
+
+}
+
+    else {
+        alert (response.statusText);
+        return;
+    }
+
+
+
+
+}
+)
+    .catch(function(error) {
+        alert('unable to connect to API');
+    });
+
+// .then(function(data) {
+//     $('#data').text(data);
+//     console.log(data);
+//     // console.log(data.weather[0].description);
+//     cityName = data.name
+//     console.log(cityName);
+
+//     var currentTemperature = (((1.8)*((data.main.temp)-273.15))+32)
+
+//     $('#cityName').text(data.name);
+//     $('#currentTemperature').text(currentTemperature);
+//     $('#currentWind').text(data.wind.speed + " wind speed");
+//     $('#currentHumidity').text(data.main.humidity + " humidity");
+//     console.log(currentDate);
+//     var lat = data.coord.lat;
+//     var lon = data.coord.lon;
+//     console.log(lat);
+//     console.log(lon);
    
-    weatherData(lat,lon);
-})
+//     weatherData(lat,lon);
+// })
 
 }
 
@@ -183,7 +246,7 @@ fetch(weatherURL)
 
             http://openweathermap.org/img/wn/10d@2x.png
 
-            var weatherIcon = " http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png";
+            var weatherIcon = " http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
 
             var tempConversion = (((1.8)*((data.list[i].main.temp)-273.15))+32)
             var timeNow = moment();
@@ -192,98 +255,45 @@ fetch(weatherURL)
             $('#' + i + 'date').text((moment().add(i,'days').format('L')))
             // $('#' + i + "icon").text(data.list[i].weather[0].icon);
             // $('#' + i + "icon").innerHtml(weatherIcon);
-              $('img#' + i + "icon").attr(weatherIcon);
-           $('#' + i + "icon").prop(weatherIcon);
-            $('#' + i + "icon").attr(" http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png");
+              $('#' + i + "icon").attr("src", weatherIcon);
+        //    $('#' + i + "icon").prop(weatherIcon);
+            // $('#' + i + "icon").attr(" http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + "@2x.png");
             // $('#' + i + "temp").text(data.list[i].main.temp);
             $('#' + i + "temp").text(tempConversion + "Temperature");
             $('#' + i + "wind").text(data.list[i].wind.speed + " wind speed");
             $('#' + i + "humidity").text(data.list[i].main.humidity + " humidity") ;
 
-        // for (j=1;j<40;j++)   
-        //     if ((moment().add(j,'days').startOf('day')).isAfter(data.list[j].dt_txt)) {
-        //         console.log("Yes");
-        //         console.log(moment().add(j,'days').startOf('day'));
-        //         console.log(data.list[j].dt_txt);
-
-        //         var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
-
-        //         $('#' + i + "temp").text(tempConversion + "Temperature");
-        //         $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
-        //         $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
-        //     }
-            
-        //     else {
-        //         console.log("No");
-        //         console.log(moment().add(j,'days').startOf('day'));
-        //         console.log(data.list[j].dt_txt);
-        //         i++;
-        //     }
-
-
-      
-
-
-//             for (j=0;j<40;j++)   {
-//             var unixTimeStamp = data.list[j].dt;
-//             var unixTime = function toDate(unixtimeStamp) {
-//                 return new Date (
-//                     unixTimeStamp * 1000
-//                 )
-//             }
-//             console.log(unixTime);
-// // if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
-
-//             if ((moment().add(i,'days').startOf('day')).isAfter(unixTime)) {
-//                 console.log("Yes");
-//                 console.log(moment().add(j,'days').startOf('day'));
-//                 console.log(data.list[j].dt_txt);
-
-//                 var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
-
-//                 $('#' + i + "temp").text(tempConversion + "Temperature");
-//                 $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
-//                 $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
-//                 j=0;
-//                 break;
-               
-//             }
-            
-//             else {
-//                 console.log("No");
-//                 console.log(moment().add(j,'days').startOf('day'));
-//                 console.log(data.list[j].dt_txt);
-//               break;
-//             }
-
-
-
-
+       
             for (j=0;j<40;j++)   {
                 var unixTimeStamp = data.list[j].dt;
-                var unixTime = function toDate(unixtimeStamp) {
-                    return new Date (
-                        unixTimeStamp * 1000
-                    )
-                }
-                console.log(unixTime);
+                // var unixTime = function toDate(unixtimeStamp) {
+                //     return new Date (
+                //         unixTimeStamp * 1000
+                //     )
+                // }
+                // console.log(unixTime);
                 var date = new Date();
-                date.setDate(date.getDate() + i);
+                date.setDate(date.getDate() + (i-1));
                 console.log(date);
                 var currentTime = Math.round((date).getTime()/1000);
-                console.log(currentTime);
+                // console.log(currentTime);
     // if ((moment().add(i,'days').startOf('day')).isAfter(new Date((data.list[j].dt)*1000)))
-    
-                if ((currentTime)<(data.list[j].dt)) {
+    var currentDate = new Date(unixTimeStamp*1000).toLocaleDateString()
+
+
+        console.log(currentTime,data.list[j].dt);
+
+                if ((currentTime)<=(data.list[j].dt)) {
+                    console.log(currentTime);
                     console.log("Yes");
                     console.log(moment().add(j,'days').startOf('day'));
                     console.log(data.list[j].dt_txt);
     
-                    var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32)
+                    var tempConversion = (((1.8)*((data.list[j].main.temp)-273.15))+32).toFixed(2);
     
-                    $('#' + i + "temp").text(tempConversion + "Temperature");
-                    $('#' + i + "wind").text(data.list[j].wind.speed + " wind speed");
-                    $('#' + i + "humidity").text(data.list[j].main.humidity + " humidity") ;
+                    $('#' + i + "temp").text("Temp: " + tempConversion);
+                    $('#' + i + "wind").text("Wind Speed: " + data.list[j].wind.speed);
+                    $('#' + i + "humidity").text("Humidity: " + data.list[j].main.humidity) ;
                     j=0;
                     break;
                    
@@ -298,14 +308,14 @@ fetch(weatherURL)
 
 
  //display these, and then append again to create a row of boxes
-            console.log(data.list[i].clouds.dt);
-            console.log(data.list[i].weather[0].icon);
-            console.log(data.list[i].main.temp);
-            console.log(data.list[i].wind.speed);
-            console.log(data.list[i].main.humidity);
-            console.log(weatherIcon);
+        //     console.log(data.list[i].clouds.dt);
+        //     console.log(data.list[i].weather[0].icon);
+        //     console.log(data.list[i].main.temp);
+        //     console.log(data.list[i].wind.speed);
+        //     console.log(data.list[i].main.humidity);
+        //     console.log(weatherIcon);
 
-           console.log(timeNow);
+        //    console.log(timeNow);
 
 
         }
@@ -317,14 +327,10 @@ fetch(weatherURL)
     })
 
 }
-
-
-
-
-
+loadSearch();
 cityButtons.addEventListener('click', buttonClick);
 cityTypeSearchButton.addEventListener('submit', cityInput);
-cityTypeSearchButton.addEventListener('submit,', addSearch);
+// cityTypeSearchButton.addEventListener('submit,', addSearch);
 clearSearch.addEventListener('click', clearCities);
 
 
