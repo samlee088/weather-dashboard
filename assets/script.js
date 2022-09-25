@@ -41,10 +41,10 @@ function addSearch(event) {
 
 function loadSearch() {
 
-    searchList = JSON.parse(localStorage.getItem("cities"));
+    searchList = JSON.parse(localStorage.getItem("cities")) || [];
 
     $('#cityButton').empty();
-   if(searchList.Length!==null) {
+   if(searchList !==undefined && searchList.length !==null) {
         for (i=0; i<searchList.length; i++) {
 
             var cityName = searchList[i];
