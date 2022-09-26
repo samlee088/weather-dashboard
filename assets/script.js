@@ -17,6 +17,7 @@ var cityInput = function (event) {
     city = cityTypeSearch.value.trim();
     weatherAPI(event);
     submissionCheck(city);
+    $('#cityId').val('');
 }
 
 /* This is function for eventHandler for clicks on the saves cities in the QuickList */
@@ -107,7 +108,7 @@ fetch(queryURL)
             })
         }
             else {
-                alert (response.statusText);
+                alert (response.statusText + " - Please try again with valid search option");
                 return;
             }
     })
